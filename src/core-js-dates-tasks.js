@@ -157,8 +157,14 @@ function isDateInPeriod(date, period) {
  * '1999-01-05T02:20:00.000Z' => '1/5/1999, 2:20:00 AM'
  * '2010-12-15T22:59:00.000Z' => '12/15/2010, 10:59:00 PM'
  */
-function formatDate(/* date */) {
-  throw new Error('Not implemented');
+function formatDate(date) {
+  const d = new Date(date);
+
+  const month = d.getUTCMonth() + 1;
+  const day = d.getUTCDate();
+  const year = d.getUTCFullYear();
+  const time = d.toLocaleTimeString('en-US', { timeZone: 'UTC' });
+  return `${month}/${day}/${year}, ${time}`;
 }
 
 /**
@@ -217,8 +223,24 @@ function getWeekNumberByDate(/* date */) {
  * Date(2024, 0, 13) => Date(2024, 8, 13)
  * Date(2023, 1, 1) => Date(2023, 9, 13)
  */
-function getNextFridayThe13th(/* date */) {
-  throw new Error('Not implemented');
+function getNextFridayThe13th(date) {
+  const daysInMonth = 30;
+  const friday = 5;
+  const nextFridayThe13th = new Date(date);
+
+  while (true) {
+    nextFridayThe13th.setDate(nextFridayThe13th.getDate() + 1);
+    if (
+      nextFridayThe13th.getDate() === 13 &&
+      nextFridayThe13th.getDay() === friday
+    ) {
+      return nextFridayThe13th;
+    }
+    if (nextFridayThe13th.getDate() > daysInMonth) {
+      nextFridayThe13th.setDate(1);
+      nextFridayThe13th.setMonth(nextFridayThe13th.getMonth() + 1);
+    }
+  }
 }
 
 /**
@@ -232,8 +254,9 @@ function getNextFridayThe13th(/* date */) {
  * Date(2024, 5, 1) => 2
  * Date(2024, 10, 10) => 4
  */
-function getQuarter(/* date */) {
-  throw new Error('Not implemented');
+function getQuarter(date) {
+  const month = date.getMonth();
+  return Math.floor(month / 3) + 1;
 }
 
 /**
@@ -270,8 +293,19 @@ function getWorkSchedule(/* period, countWorkDays, countOffDays */) {
  * Date(2022, 2, 1) => false
  * Date(2020, 2, 1) => true
  */
-function isLeapYear(/* date */) {
-  throw new Error('Not implemented');
+function isLeapYear(date) {
+  const year = date.getFullYear();
+
+  if (year % 4 !== 0) {
+    return false;
+  }
+  if (year % 100 !== 0) {
+    return true;
+  }
+  if (year % 400 === 0) {
+    return true;
+  }
+  return false;
 }
 
 module.exports = {
